@@ -1,0 +1,6 @@
+version: '3'
+services:
+  producer:
+    build:
+      context: .
+    command: sitemon producer -c config.yaml
