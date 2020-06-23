@@ -2,7 +2,7 @@ import unittest.mock as mock
 import pytest
 
 from pytest import fixture
-from .checker import Scanner
+from .scanner import Scanner
 from .config import Config, SiteConfig
 
 class _TestClient:

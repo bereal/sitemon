@@ -21,4 +21,11 @@ class Config:
     interval: int
     kafka: KafkaConfig
 
+    @classmethod
+    def from_dict(cls, d):
+        return Config(
+            sites=[SiteConfig(**s) for s in d.get('sites')],
+            interval=d.get('interval', 10),
+            kafka=KafkaConfig(**d.get('kafka')),
+        )
 
