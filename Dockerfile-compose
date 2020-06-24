@@ -3,10 +3,8 @@ FROM python:3.8
 RUN mkdir -p /opt/sitemon/
 WORKDIR /opt/sitemon
 
-COPY setup.py /opt/sitemon
-
-RUN python setup.py egg_info
-RUN pip install -r sitemon.egg-info/requires.txt
+COPY setup.py requirements.txt ./
+RUN pip install -r requirements.txt
 
 COPY ./sitemon /opt/sitemon/sitemon
 

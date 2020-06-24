@@ -10,6 +10,8 @@ from .scanner import Scanner
 from .config import Config, SiteConfig
 
 class _TestClient:
+    '''A mock HTTP client
+    '''
     def __init__(self, sites):
         self.sites = sites
 

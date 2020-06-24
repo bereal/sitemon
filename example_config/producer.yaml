@@ -2,6 +2,10 @@ interval: 10
 sites:
   - url: 'http://httpbin/anything?ok'
     pattern: ok
+  - url: 'http://httpbin/anything?wontmatch'
+    pattern: something
+  - url: 'http://httpbin/status/500'
+
 kafka:
   server: 'kafka:9092'
   topic: sitemon

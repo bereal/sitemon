@@ -1,8 +1,11 @@
 kafka:
   server: 'kafka:9092'
   topic: sitemon
+  consumers: 4
 
 postgres:
   host: postgres
   user: postgres
   password: password
+  port: 5432
+  db: postgres

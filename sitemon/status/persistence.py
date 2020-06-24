@@ -4,8 +4,6 @@ import aiopg
 
 from contextlib import asynccontextmanager
 
-from psycopg2.extras import DictCursor
-
 from sitemon.kafka import SiteReport
 from .config import PostgresConfig
 
@@ -28,9 +26,9 @@ class Persistence:
         self._pool = pool
 
     @asynccontextmanager
-    async def _cursor(self) -> DictCursor:
+    async def _cursor(self):
         async with self._pool.acquire() as conn:
-            async with conn.cursor(cursor_factory=DictCursor) as cur:
+            async with conn.cursor() as cur:
                 await cur.execute('BEGIN')
                 try:
                     yield cur
@@ -46,7 +44,7 @@ class Persistence:
                 await cur.execute(s);
 
     async def update_site_status(self, report: SiteReport):
-        '''
+        '''Insert or update site status
         '''
         async with self._cursor() as cur:
             await cur.execute(

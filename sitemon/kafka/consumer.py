@@ -15,7 +15,7 @@ class Consumer:
         tp = TopicPartition(msg.topic, msg.partition)
 
         site = read_report(msg.value)
-        print('received', site, flush=True)
+        print('Received', site, flush=True)
         yield site
 
         await self._cons.committed(tp)

@@ -15,7 +15,7 @@ class Producer:
         self._prod = prod
 
     async def send_report(self, report: SiteReport):
-        print('sending', report, flush=True)
+        print('Sending', report, flush=True)
         value = serialize_report(report)
         key = base64.b64encode(report.url.encode('utf-8'))
         await self._prod.send(self._topic, value, key=key)
