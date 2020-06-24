@@ -15,6 +15,7 @@ class PostgresConfig:
 class KafkaConfig:
     topic: str
     server: str
+    consumers: int = 1
 
 
 @dataclass
