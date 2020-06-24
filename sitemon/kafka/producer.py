@@ -5,6 +5,7 @@ import sys
 from contextlib import asynccontextmanager
 from aiokafka import AIOKafkaProducer
 
+from .connect import connect
 from .schema import SiteReport, serialize_report
 
 
@@ -22,16 +23,7 @@ class Producer:
     @classmethod
     @asynccontextmanager
     async def start(cls, topic: str, server: str):
-        for i in range(9, -1, -1):
-            try:
-                prod = AIOKafkaProducer(bootstrap_servers=server)
-            except:
-                if not i:
-                    raise
-                print('Waiting for Kafka...', file=sys.stderr)
-                await asyncio.sleep(3)
-            else:
-                break
+        prod = await connect(AIOKafkaProducer, bootstrap_servers=server)
 
         try:
             await prod.start()

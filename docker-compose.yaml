@@ -24,3 +24,10 @@ services:
     command: sitemon consumer -c /opt/config/consumer.yaml
     volumes:
       - ./example_config:/opt/config
+
+  postgres:
+    image: postgres
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_PASSWORD: password

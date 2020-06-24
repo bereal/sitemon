@@ -1,3 +1,8 @@
 kafka:
   server: 'kafka:9092'
   topic: sitemon
+
+postgres:
+  host: postgres
+  user: postgres
+  password: password
