@@ -1,7 +1,0 @@
-sites:
-  - url: 'https://httpbin.org/anything?abc=def'
-    pattern: abc
-interval: 1
-kafka:
-  server: 'localhost:9092'
-  topic: 'sites'

@@ -14,7 +14,13 @@ services:
       context: .
       dockerfile: Dockerfile-compose
     command: sitemon producer -c /opt/config/producer.yaml
-    environment:
-      WAIT_HOSTS: 'kafka:9092, httpbin:80'
+    volumes:
+      - ./example_config:/opt/config
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile-compose
+    command: sitemon consumer -c /opt/config/consumer.yaml
     volumes:
       - ./example_config:/opt/config
