@@ -1,7 +1,7 @@
-interval: 10
+interval: 5
 sites:
-  - url: 'http://httpbin/anything?ok'
-    pattern: ok
+  - url: 'http://httpbin/anything?match'
+    pattern: match
   - url: 'http://httpbin/anything?wontmatch'
     pattern: something
   - url: 'http://httpbin/status/500'

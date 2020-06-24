@@ -27,7 +27,7 @@ to the same Python module `sitemon.kafka`.
 * Because the task in inherently io-bound, I am using `asyncio`-based APIs for
 both PostgreSQL and Kafka.
 
-* Missing part: 1) proper logging, 2) graceful shutdown
+* Missing parts: 1) proper logging, 2) graceful shutdown
 
 
 ## Code overview
@@ -78,8 +78,8 @@ That part is covered by unit tests with mocks.
 Unit tests can be run using `pytest` assuming that the dependencies are installed:
 
     $ pip install -r requirements.txt
-    ...
-    $ pytest -v
+    $ pip install pytest pytest-asyncio
+    $ pytest -v sitemon
 
 After all the low-level logic was moved to wrappers, it turned out that the consumer part
 is nothing but calling those messaging and persistence layers in a loop. So I decided to
@@ -90,3 +90,10 @@ rely on integrated tests here. The docker-compose environment for tests includes
  * httpbin
  * producer
  * consumer
+
+To run the integrated tests:
+
+    $ docked-compose up -d --build  # this may take a while
+    $ pytest -v integrated_test
+
+The integrated test relies on the `example_config` files.
