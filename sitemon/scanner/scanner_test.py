@@ -24,7 +24,7 @@ class _TestClient:
 client = _TestClient({
     'url1': 'result1',
     'error': Exception('err_text'),
-    'error_code': ClientResponseError(None, None, code=400, message='client_error'),
+    'client_error': ClientResponseError(None, None, code=400, message='client_error'),
 })
 
 
@@ -77,7 +77,7 @@ async def test_regex_mismatch():
 
 @pytest.mark.asyncio
 async def test_error():
-    '''Scan site with error
+    '''Scan site with network error
     '''
     producer = mock.AsyncMock()
     scanner = Scanner(producer, client)
@@ -86,6 +86,21 @@ async def test_error():
         url='error',
         response_time=mock.ANY,
         error_text='err_text',
+    ))
+
+
+@pytest.mark.asyncio
+async def test_client_error():
+    '''Scan site with client error
+    '''
+    producer = mock.AsyncMock()
+    scanner = Scanner(producer, client)
+    await scanner.scan_site('client_error')
+    producer.send_report.assert_called_with(SiteReport(
+        url='client_error',
+        response_code=400,
+        response_time=mock.ANY,
+        error_text='client_error',
     ))
 
 
@@ -107,6 +122,9 @@ async def test_scan_multiple():
         pattern='su',
         pattern_match=True,
     ))
-    # producer.send_report.assert_any_call('topic', {
-    #     'url': 'error', 'error': 'err_text', 'response_time': mock.ANY,
-    # })
+
+    producer.send_report.assert_any_call(SiteReport(
+        url='error',
+        response_time=mock.ANY,
+        error_text='err_text',
+    ))
