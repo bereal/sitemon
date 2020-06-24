@@ -23,11 +23,6 @@ class Producer:
     @classmethod
     @asynccontextmanager
     async def start(cls, topic: str, server: str):
-        prod = await connect(AIOKafkaProducer, bootstrap_servers=server)
-
-        try:
-            await prod.start()
+        async with connect(AIOKafkaProducer, bootstrap_servers=server) as prod:
             yield cls(topic, prod)
-        finally:
-            await prod.stop()
 
