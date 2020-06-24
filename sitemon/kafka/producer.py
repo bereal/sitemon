@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
 from aiokafka import AIOKafkaProducer
 
+import asyncio
+import sys
 from .schema import SiteReport, serialize_report
 
 class Producer:
@@ -14,7 +16,17 @@ class Producer:
     @classmethod
     @asynccontextmanager
     async def start(cls, topic: str, server: str):
-        prod = AIOKafkaProducer(bootstrap_servers=server)
+        for i in range(9, -1, -1):
+            try:
+                prod = AIOKafkaProducer(bootstrap_servers=server)
+            except:
+                if not i:
+                    raise
+                print('Waiting for Kafka...', file=sys.stderr)
+                await asyncio.sleep(3)
+            else:
+                break
+
         try:
             await prod.start()
             yield cls(topic, prod)

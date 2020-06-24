@@ -1,8 +1,20 @@
 version: '3'
 services:
+  kafka:
+    image: spotify/kafka
+    environment:
+      ADVERTISED_HOST: kafka
+      ADVERTISED_PORT: 9092
+
+  httpbin:
+    image: kennethreitz/httpbin
+
   producer:
     build:
       context: .
+      dockerfile: Dockerfile-compose
     command: sitemon producer -c /opt/config/producer.yaml
+    environment:
+      WAIT_HOSTS: 'kafka:9092, httpbin:80'
     volumes:
       - ./example_config:/opt/config

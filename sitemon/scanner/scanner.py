@@ -17,7 +17,7 @@ class Client:
     async def get(self, url) -> Tuple[int, str]:
         async with ClientSession() as s:
             async with s.get(url) as r:
-                return await r.status, r.body()
+                return r.status, await r.text()
 
 
 class Scanner:
@@ -47,7 +47,7 @@ class Scanner:
                 report.pattern = pattern
                 report.pattern_match = found
 
-        report.response_time = time.monotonic() - before
+        report.response_time = int(time.monotonic() - before)
         await self._producer.send_report(report)
 
     async def scan_all(self, sites: List[SiteConfig]):
@@ -57,6 +57,7 @@ class Scanner:
 
     async def start(self, sites: List[SiteConfig], interval: int):
         while True:
+            print('PING')
             await self.scan_all(sites)
             await asyncio.sleep(interval)
 
