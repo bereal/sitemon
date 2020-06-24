@@ -10,7 +10,7 @@ status persistence logic (a.k.a. consumer) via Apache Kafka.
 ## Design overview
 
 * The service is built as a single Python package, but producer and consumer
-can be run separately by different command-line tools.
+can be run separately by different command-line arguments.
 
 * Site data is stored into a single table, which keeps the latest status
 for each site: url, response code etc.
@@ -34,19 +34,19 @@ both PostgreSQL and Kafka.
 
 The most important files are:
 
-sitemon
-├── kafka               - low-level Kafka wrappers
-│   ├── consumer.py
-│   ├── producer.py
-│   └── schema.py       - data object and Avro serialization
-├── main.py             - main command-line entry
-├── scanner
-│   ├── config.py
-│   └── scanner.py      - site scanner logic
-└── status
-    ├── config.py
-    ├── persistence.py  - PostgreSQL low-level logic
-    └── worker.py       - consumer loop
+    sitemon
+    ├── kafka               - low-level Kafka wrappers
+    │   ├── consumer.py
+    │   ├── producer.py
+    │   └── schema.py       - data object and Avro serialization
+    ├── main.py             - main command-line entry
+    ├── scanner
+    │   ├── config.py
+    │   └── scanner.py      - site scanner logic
+    └── status
+        ├── config.py
+        ├── persistence.py  - PostgreSQL low-level logic
+        └── worker.py       - consumer loop
 
 
 ## Installation and running
@@ -66,6 +66,8 @@ To run the consumer:
     $ sitemon consumer -c /path/to/consumer/config.yaml
 
 A dockerfile is also available.
+
+Examples of the configuration files are in `example_config`.
 
 
 ## Testing
