@@ -25,54 +25,64 @@ client = _TestClient({
 
 @pytest.mark.asyncio
 async def test_simple():
+    '''Scan single site
+    '''
     producer = mock.AsyncMock()
 
     scanner = Scanner('topic', producer, client)
     await scanner.scan_site('url1')
     producer.send.assert_called_with('topic', {
         'url': 'url1',
-        'time': mock.ANY,
+        'response_time': mock.ANY,
     })
 
 
 @pytest.mark.asyncio
 async def test_regex():
+    '''Scan single site with matching pattern
+    '''
     producer = mock.AsyncMock()
     scanner = Scanner('topic', producer, client)
     await scanner.scan_site('url1', 'sul')
     producer.send.assert_called_with('topic', {
         'url': 'url1',
-        'time': mock.ANY,
+        'response_time': mock.ANY,
         'pattern_match': True,
     })
 
 
 @pytest.mark.asyncio
 async def test_regex_mismatch():
+    '''Scan single site with mismatching pattern
+    '''
     producer = mock.AsyncMock()
     scanner = Scanner('topic', producer, client)
     await scanner.scan_site('url1', 'unknown')
     producer.send.assert_called_with('topic', {
         'url': 'url1',
-        'time': mock.ANY,
+        'response_time': mock.ANY,
         'pattern_match': False,
     })
 
 
 @pytest.mark.asyncio
 async def test_error():
+    '''Scan site with error
+    '''
     producer = mock.AsyncMock()
     scanner = Scanner('topic', producer, client)
     await scanner.scan_site('error')
     producer.send.assert_called_with('topic', {
         'url': 'error',
-        'time': mock.ANY,
+        'response_time': mock.ANY,
         'error': 'err_text',
     })
 
 
 @pytest.mark.asyncio
 async def test_scan_multiple():
+    '''Scan multiple sites
+    '''
     producer = mock.AsyncMock()
     scanner = Scanner('topic', producer, client)
     await scanner.scan_all([
@@ -81,8 +91,8 @@ async def test_scan_multiple():
     ])
 
     producer.send.assert_any_call('topic', {
-        'url': 'url1', 'pattern_match': True, 'time': mock.ANY,
+        'url': 'url1', 'pattern_match': True, 'response_time': mock.ANY,
     })
     producer.send.assert_any_call('topic', {
-        'url': 'error', 'error': 'err_text', 'time': mock.ANY,
+        'url': 'error', 'error': 'err_text', 'response_time': mock.ANY,
     })
