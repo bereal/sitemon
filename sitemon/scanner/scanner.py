@@ -51,7 +51,7 @@ class Scanner:
                 report.pattern = pattern
                 report.pattern_match = found
 
-        report.response_time = int(time.monotonic() - before)
+        report.response_time = int((time.monotonic() - before) * 1000)
         await self._producer.send_report(report)
 
     async def scan_all(self, sites: List[SiteConfig]):
