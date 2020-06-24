@@ -3,4 +3,6 @@ services:
   producer:
     build:
       context: .
-    command: sitemon producer -c config.yaml
+    command: sitemon producer -c /opt/config/producer.yaml
+    volumes:
+      - ./example_config:/opt/config

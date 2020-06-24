@@ -10,8 +10,10 @@ setuptools.setup(
         ],
     },
     install_requires=[
-        'aiohttp>=3.6.2',
-        'aiokafka>=0.6.0',
-        'PyYAML>=5.3',
+        'aiohttp >= 3.6.2',
+        'aiokafka >= 0.6.0',
+        'PyYAML >= 5.3',
+        'aiopg >= 1.0.0',
+        'fastavro >= 0.23.5',
     ],
 )

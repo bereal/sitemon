@@ -1,0 +1,6 @@
+interval: 10
+sites:
+  - url: http://httpbin.com/anything
+kafka:
+  server: 'kafka:9092'
+  topic: sitemon
