@@ -27,7 +27,7 @@ to the same Python module `sitemon.kafka`.
 * Because the task in inherently io-bound, I am using `asyncio`-based APIs for
 both PostgreSQL and Kafka.
 
-* Missing parts: 1) proper logging, 2) graceful shutdown
+* Missing parts: 1) proper logging, 2) graceful shutdown.
 
 
 ## Code overview
@@ -51,7 +51,7 @@ The most important files are:
 
 ## Installation and running
 
-The service is packaged and installed using the python `setuptools`.
+The service is packaged and installed using the python standard `setuptools`.
 
 To install the service:
 
@@ -72,7 +72,7 @@ Examples of the configuration files are in `example_config`.
 
 ## Testing
 
-Producer part includes some amount of business logic, such as analyzing the site state.
+Producer part includes some amount of high-level logic, such as analyzing the site state.
 That part is covered by unit tests with mocks.
 
 Unit tests can be run using `pytest` assuming that the dependencies are installed:
@@ -93,7 +93,8 @@ rely on integrated tests here. The docker-compose environment for tests includes
 
 To run the integrated tests:
 
-    $ docked-compose up -d --build  # this may take a while
+    $ docker-compose up -d --build  # this may take a while first time
     $ pytest -v integrated_test
 
 The integrated test relies on the `example_config` files.
+In a bigger scale the expected test results would likely also be configured.
