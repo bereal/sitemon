@@ -38,11 +38,13 @@ The most important files are:
     ├── kafka               - low-level Kafka wrappers
     │   ├── consumer.py
     │   ├── producer.py
-    │   └── schema.py       - data object and Avro serialization
+    |   ├── schema.py       - data object and Avro serialization
+    │   └── schema_test.py
     ├── main.py             - main command-line entry
     ├── scanner
     │   ├── config.py
-    │   └── scanner.py      - site scanner logic
+    |   ├── scanner.py      - site scanner logic
+    │   └── scanner_test.py
     └── status
         ├── config.py
         ├── persistence.py  - PostgreSQL low-level logic
