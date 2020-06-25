@@ -1,5 +1,6 @@
 import asyncio
 import dataclasses
+import itertools
 import re
 import time
 from typing import List, Optional, Tuple
@@ -54,18 +55,12 @@ class Scanner:
         report.response_time = int((time.monotonic() - before) * 1000)
         await self._producer.send_report(report)
 
-    async def scan_all(self, sites: List[SiteConfig]):
-        '''Check all the sites concurrently
-        '''
-        await asyncio.wait([
-            self.scan_site(s.url, s.pattern) for s in sites
-        ])
-
     async def start(self, sites: List[SiteConfig], interval: int):
         '''Keep checking the sites forever with the given interval
         '''
-        while True:
-            await self.scan_all(sites)
-            await asyncio.sleep(interval)
+        pause = interval / len(sites)
+        for site in itertools.cycle(sites):
+            asyncio.create_task(self.scan_site(site.url, site.pattern))
+            await asyncio.sleep(pause)
 
 

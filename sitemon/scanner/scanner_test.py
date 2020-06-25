@@ -104,29 +104,3 @@ async def test_client_error():
         response_time=mock.ANY,
         error_text='client_error',
     ))
-
-
-@pytest.mark.asyncio
-async def test_scan_multiple():
-    '''Scan multiple sites
-    '''
-    producer = mock.AsyncMock()
-    scanner = Scanner(producer, client)
-    await scanner.scan_all([
-        SiteConfig(url='url1', pattern='su'),
-        SiteConfig(url='error'),
-    ])
-
-    producer.send_report.assert_any_call(SiteReport(
-        url='url1',
-        response_code=200,
-        response_time=mock.ANY,
-        pattern='su',
-        pattern_match=True,
-    ))
-
-    producer.send_report.assert_any_call(SiteReport(
-        url='error',
-        response_time=mock.ANY,
-        error_text='err_text',
-    ))
