@@ -8,7 +8,12 @@ from psycopg2.extras import DictCursor
 
 @pytest.fixture
 async def pool():
-    async with aiopg.create_pool('host=localhost port=6543 user=postgres password=password dbname=postgres') as pool:
+    async with aiopg.create_pool(
+            host='localhost',
+            port=6543,
+            user='postgres',
+            password='password',
+            dbname='postgres') as pool:
         yield pool
 
 

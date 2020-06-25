@@ -20,6 +20,6 @@ docker:
 	docker build -t sitemon .
 
 compose:
-	docker-compose up -d
+	docker-compose up -d --build
 
 .PHONY: test test-integrated dependencies test-dependencies

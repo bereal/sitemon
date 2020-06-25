@@ -66,10 +66,14 @@ class Persistence:
     @classmethod
     @asynccontextmanager
     async def connect(cls, config: PostgresConfig) -> 'Persistence':
-        dsn = f'''
-            host={config.host} dbname={config.db or config.user} user={config.user} password={config.password or ''} port={config.port}'
-        '''
-        async with aiopg.create_pool(dsn) as pool:
+        kwargs = {
+            'host': config.host,
+            'dbname': config.db or config.user,
+            'user': config.user,
+            'password': config.password or '',
+            'port': config.port or 5432,
+        }
+        async with aiopg.create_pool(**kwargs) as pool:
             p = cls(pool)
             await p.init_schema()
             yield p
