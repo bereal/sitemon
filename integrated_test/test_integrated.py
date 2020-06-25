@@ -22,6 +22,9 @@ async def cursor(pool):
 
 
 async def get_snapshot(cursor):
+    '''Get all the site info as { url: info }
+    '''
+
     records = {}
     await cursor.execute('SELECT * FROM site_status')
     for row in await cursor.fetchall():
@@ -35,9 +38,13 @@ async def get_snapshot(cursor):
 async def test_flow(cursor):
     before = await get_snapshot(cursor)
     before_ts = datetime.utcnow()
+
     await asyncio.sleep(7)
+
     after = await get_snapshot(cursor)
     assert before != after
+
+    # make sure that the known sites are updated and data is valid
 
     match_site = after['http://httpbin/anything?match']
 
