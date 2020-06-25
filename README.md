@@ -18,7 +18,7 @@ for each site: url, response code etc.
 * The code is using Dependency Inversion as the main design principle.
 Low-level HTTP, Kafka and PostgreSQL logic is isolated into separate classes.
 
-* Avro is used as the data tranfer protocol.
+* Avro is used as the data transfer protocol.
 
 * Because Kafka producer and consumer parts are inherently coupled by the message format
 and serialization logic, low-level Kafka consumer and producer wrappers belong
@@ -55,7 +55,7 @@ The service is packaged and installed using the python standard `setuptools`.
 
 To install the service:
 
-    $ python setup.py install
+    $ make install
 
 To run the producer:
 
@@ -65,9 +65,12 @@ To run the consumer:
 
     $ sitemon consumer -c /path/to/consumer/config.yaml
 
-A dockerfile is also available.
+To build a .whl package:
+
+    $ make wheel
 
 Examples of the configuration files are in `example_config`.
+A Docker image is also available and can be used to run both producer and consumer.
 
 
 ## Testing
@@ -75,11 +78,12 @@ Examples of the configuration files are in `example_config`.
 Producer part includes some amount of high-level logic, such as analyzing the site state.
 That part is covered by unit tests with mocks.
 
-Unit tests can be run using `pytest` assuming that the dependencies are installed:
 
-    $ pip install -r requirements.txt
-    $ pip install pytest pytest-asyncio
-    $ pytest -v
+To run the unit tests:
+
+    $ make test
+
+(That also makes sure that dependencies are installed.)
 
 After all the low-level logic was moved to wrappers, it turned out that the consumer part
 is nothing but calling those messaging and persistence layers in a loop. So I decided to
@@ -95,6 +99,10 @@ To run the integrated test:
 
     $ docker-compose up -d --build  # this may take a while first time
     $ pytest -v --integrated
+
+or just:
+
+    $ make test-integrated
 
 The integrated test relies on the `example_config` files.
 In a bigger scale the expected test results would likely also be configured.
