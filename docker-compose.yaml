@@ -6,6 +6,13 @@ services:
       ADVERTISED_HOST: kafka
       ADVERTISED_PORT: 9092
 
+  postgres:
+    image: postgres
+    ports:
+      - '6543:5432'
+    environment:
+      POSTGRES_PASSWORD: password
+
   httpbin:
     image: kennethreitz/httpbin
 
@@ -14,6 +21,9 @@ services:
       context: .
       dockerfile: Dockerfile-compose
     command: sitemon producer -c /opt/config/producer.yaml
+    depends_on:
+      - kafka
+      - httpbin
     volumes:
       - ./example_config:/opt/config
 
@@ -22,12 +32,8 @@ services:
       context: .
       dockerfile: Dockerfile-compose
     command: sitemon consumer -c /opt/config/consumer.yaml
+    depends_on:
+      - kafka
+      - postgres
     volumes:
       - ./example_config:/opt/config
-
-  postgres:
-    image: postgres
-    ports:
-      - '5433:5432'
-    environment:
-      POSTGRES_PASSWORD: password

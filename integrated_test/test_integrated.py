@@ -8,7 +8,7 @@ from psycopg2.extras import DictCursor
 
 @pytest.fixture
 async def pool():
-    async with aiopg.create_pool('host=localhost port=5433 user=postgres password=password dbname=postgres') as pool:
+    async with aiopg.create_pool('host=localhost port=6543 user=postgres password=password dbname=postgres') as pool:
         yield pool
 
 
@@ -21,7 +21,6 @@ async def cursor(pool):
 async def get_snapshot(cursor):
     '''Get all the site info as { url: info }
     '''
-
     records = {}
     await cursor.execute('SELECT * FROM site_status')
     for row in await cursor.fetchall():
@@ -30,31 +29,35 @@ async def get_snapshot(cursor):
     return records
 
 
+expected_data = {
+    'http://httpbin/anything?match': {
+        'pattern_match': True,
+        'response_code': 200,
+    },
+    'http://httpbin/anything?wontmatch': {
+        'pattern_match': False,
+        'response_code': 200,
+    },
+    'http://httpbin/status/500': {
+        'response_code': 500,
+    }
+}
+
 @pytest.mark.integrated
 @pytest.mark.asyncio
 async def test_flow(cursor):
+    '''Test that the flow works end to end
+    '''
     before = await get_snapshot(cursor)
     before_ts = datetime.utcnow()
 
     await asyncio.sleep(7)
-
     after = await get_snapshot(cursor)
-    assert before != after
+
+    assert after != before
 
     # make sure that the known sites are updated and data is valid
-
-    match_site = after['http://httpbin/anything?match']
-
-    assert match_site['pattern_match']
-    assert match_site['last_checked'] > before_ts
-    assert match_site['response_code'] == 200
-
-    nomatch_site = after['http://httpbin/anything?wontmatch']
-
-    assert not nomatch_site['pattern_match']
-    assert nomatch_site['last_checked'] > before_ts
-    assert nomatch_site['response_code'] == 200
-
-    err_site = after['http://httpbin/status/500']
-    assert err_site['last_checked'] > before_ts
-    assert err_site['response_code'] == 500
+    for url, data in expected_data.items():
+        assert after[url]['last_checked'] > before_ts
+        for k, v in data.items():
+            assert after[url][k] == v

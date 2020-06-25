@@ -1,7 +1,7 @@
-test: test-dependencies
+test: dependencies test-dependencies
 	pytest -v
 
-test-integrated: test-dependencies compose
+test-integrated: test-dependencies
 	pytest -v --integrated
 
 install:
@@ -13,13 +13,13 @@ wheel:
 dependencies:
 	pip install -r requirements.txt -q
 
-test-dependencies: dependencies
+test-dependencies:
 	pip install -q pytest pytest-asyncio
 
 docker:
 	docker build -t sitemon .
 
 compose:
-	docker-compose up -d --build
+	docker-compose up -d
 
 .PHONY: test test-integrated dependencies test-dependencies

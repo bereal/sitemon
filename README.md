@@ -78,7 +78,6 @@ A Docker image is also available and can be used to run both producer and consum
 Producer part includes some amount of high-level logic, such as analyzing the site state.
 That part is covered by unit tests with mocks.
 
-
 To run the unit tests:
 
     $ make test
@@ -89,7 +88,7 @@ After all the low-level logic was moved to wrappers, it turned out that the cons
 is nothing but calling those messaging and persistence layers in a loop. So I decided to
 rely on integrated tests here. The docker-compose environment for tests includes:
 
- * Kafka (self-contained image from Spotify)
+ * Kafka (self-contained image from Spotify, old, but enough for the job)
  * PostgreSQL
  * httpbin
  * producer
@@ -97,11 +96,7 @@ rely on integrated tests here. The docker-compose environment for tests includes
 
 To run the integrated test:
 
-    $ docker-compose up -d --build  # this may take a while first time
-    $ pytest -v --integrated
-
-or just:
-
+    $ make compose  # give it some time to start
     $ make test-integrated
 
 The integrated test relies on the `example_config` files.
