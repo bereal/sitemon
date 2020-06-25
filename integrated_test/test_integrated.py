@@ -1,4 +1,6 @@
 import asyncio
+import re
+
 import aiopg
 import pytest
 
@@ -45,7 +47,11 @@ expected_data = {
     },
     'http://httpbin/status/500': {
         'response_code': 500,
-    }
+    },
+    'http://idontexist/': {
+        'response_code': None,
+        'error_text': re.compile('Cannot connect'),
+    },
 }
 
 @pytest.mark.integrated
@@ -63,6 +69,10 @@ async def test_flow(cursor):
 
     # make sure that the known sites are updated and data is valid
     for url, data in expected_data.items():
-        assert after[url]['last_checked'] > before_ts
+        site_data = after[url]
+        assert site_data['last_checked'] > before_ts
         for k, v in data.items():
-            assert after[url][k] == v
+            if isinstance(v, re.Pattern):
+                assert v.match(site_data[k])
+            else:
+                assert site_data[k] == v

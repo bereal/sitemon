@@ -5,6 +5,7 @@ sites:
   - url: 'http://httpbin/anything?wontmatch'
     pattern: something
   - url: 'http://httpbin/status/500'
+  - url: 'http://idontexist/'
 
 kafka:
   server: 'kafka:9092'
