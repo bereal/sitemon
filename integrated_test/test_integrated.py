@@ -2,9 +2,6 @@ import asyncio
 import aiopg
 import pytest
 
-import warnings
-warnings.simplefilter('ignore')
-
 from datetime import datetime
 from psycopg2.extras import DictCursor
 
