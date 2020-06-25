@@ -79,7 +79,7 @@ Unit tests can be run using `pytest` assuming that the dependencies are installe
 
     $ pip install -r requirements.txt
     $ pip install pytest pytest-asyncio
-    $ pytest -v sitemon
+    $ pytest -v
 
 After all the low-level logic was moved to wrappers, it turned out that the consumer part
 is nothing but calling those messaging and persistence layers in a loop. So I decided to
@@ -91,10 +91,10 @@ rely on integrated tests here. The docker-compose environment for tests includes
  * producer
  * consumer
 
-To run the integrated tests:
+To run the integrated test:
 
     $ docker-compose up -d --build  # this may take a while first time
-    $ pytest -v integrated_test
+    $ pytest -v --integrated
 
 The integrated test relies on the `example_config` files.
 In a bigger scale the expected test results would likely also be configured.
